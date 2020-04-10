@@ -37,6 +37,12 @@ char* Cell::getContent() const
 	return content;
 }
 
+void Cell::setContent(const char* newContent)
+{
+	content = new char[strlen(newContent) + 1];
+	strcpy_s(content, strlen(newContent) + 1, newContent);
+}
+
 int Cell::getLength() const
 {
 	return strlen(content);

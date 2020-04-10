@@ -14,5 +14,6 @@ public:
 	Cell& operator=(const Cell&);
 
 	char* getContent() const;
+	void setContent(const char*);
 	int getLength() const;
 };

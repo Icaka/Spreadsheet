@@ -12,7 +12,9 @@ private:
 public:
 	Spreadsheet(const char*);
 
-	//int getNumberOfRows(std::ifstream&) const;
+	int getNumberOfRows(std::ifstream&) const;
+	int getNumberOfColumns(std::ifstream&) const;
 	void setRows(const int);
 	int getRows() const;
+	int getColumns() const;
 };

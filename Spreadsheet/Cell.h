@@ -16,4 +16,6 @@ public:
 	char* getContent() const;
 	void setContent(const char*);
 	int getLength() const;
+
+	void print() const;
 };

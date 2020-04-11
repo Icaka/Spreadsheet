@@ -1,9 +1,10 @@
 #include "Cell.h"
-#include "iostream"
+#include <iostream>
 
 Cell::Cell()
 {
-	content = nullptr;
+	content = new char[1];
+	content = '\0';
 }
 
 Cell::~Cell()
@@ -46,4 +47,15 @@ void Cell::setContent(const char* newContent)
 int Cell::getLength() const
 {
 	return strlen(content);
+}
+
+void Cell::print() const
+{
+	if (content != '\0')
+	{
+		std::cout << " " << content << " ";
+	}
+	else {
+		std::cout << " empty ";
+	}
 }

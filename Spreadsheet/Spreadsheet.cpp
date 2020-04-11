@@ -19,10 +19,21 @@ Spreadsheet::Spreadsheet(const char* fName)
 		row = getNumberOfRows(ifs);
 		col = getNumberOfColumns(ifs);
 
+		table = new Cell * [row];
+		for (int i = 0; i < row; ++i)
+			table[i] = new Cell[col];
 
+		fillTable(ifs);
 	}
 
 	ifs.close();
+}
+
+Spreadsheet::~Spreadsheet()
+{
+	for (int i = 0; i < row; ++i)
+		delete[] table[i];
+	delete[] table;
 }
 
 int Spreadsheet::getNumberOfRows(std::ifstream& ifs) const
@@ -73,6 +84,66 @@ int Spreadsheet::getNumberOfColumns(std::ifstream& ifs) const
 	return maxWordsOnARow;
 }
 
+void Spreadsheet::fillTable(std::ifstream& ifs)
+{
+	int rCounter = 0;
+	char* buffer = new char[MAXN];
+	while (ifs)
+	{
+		ifs.getline(buffer, MAXN);
+		manageLine(rCounter, buffer);
+		rCounter++;
+	}
+	delete[] buffer;
+}
+
+void Spreadsheet::manageLine(const int curRow, const char* buff)
+{
+	/*
+	std::cout << buff << std::endl;
+	int i = 0;
+	while (buff[i] != '\0')
+	{
+		std::cout << buff[i];
+		i++;
+	}
+	std::cout << std::endl;
+	*/
+	
+	char* smallBuff = new char[256];
+	int i = 0;
+	int n = 0;
+	int column = 0;
+	while (buff[n] != '\0')
+	{
+		if (buff[n] == ',')
+		{
+			smallBuff[i] = '\0';
+			table[curRow][column].setContent(smallBuff);
+			//table[curRow][column].print();
+			//std::cout << std::endl;
+			smallBuff = new char[256];
+			column++;
+			i = 0;
+		}
+		else {
+			smallBuff[i] = buff[n];
+			i++;
+		}
+		if (buff[n + 1] == '\0')
+		{
+			smallBuff[i] = '\0';
+			table[curRow][column].setContent(smallBuff);
+			//table[curRow][column].print();
+			//std::cout << std::endl;
+		}
+		n++;
+	}
+	
+	delete[] smallBuff;
+	
+}
+
 void Spreadsheet::setRows(const int rows)
 {
 	row = rows;
@@ -86,4 +157,28 @@ int Spreadsheet::getRows() const
 int Spreadsheet::getColumns() const
 {
 	return col;
+}
+
+void Spreadsheet::testing()
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int t = 0; t < col; t++)
+		{
+			table[i][t].setContent("test");
+		}
+	}
+	testPrint();
+}
+
+void Spreadsheet::testPrint()
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int t = 0; t < col; t++)
+		{
+			table[i][t].print();
+		}
+		std::cout << std::endl;
+	}
 }

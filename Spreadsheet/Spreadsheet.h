@@ -12,6 +12,7 @@ private:
 protected:
 	void fillTable(std::ifstream&);
 	void manageLine(const int, const char*); // arguments are row number and the whole (not yet fragmented) row
+	void removeWhitespaces();
 public:
 	Spreadsheet(const char*);
 	~Spreadsheet();

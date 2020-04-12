@@ -92,6 +92,7 @@ void Spreadsheet::fillTable(std::ifstream& ifs)
 	{
 		ifs.getline(buffer, MAXN);
 		manageLine(rCounter, buffer);
+		buffer = new char[MAXN];
 		rCounter++;
 	}
 	delete[] buffer;
@@ -114,21 +115,51 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 	int i = 0;
 	int n = 0;
 	int column = 0;
+	int quotesCounter = 0;
 	while (buff[n] != '\0')
 	{
+		if (buff[n] == '"')
+		{
+			if (n != 0) // if a quote is the first element on a row it can't have a \ before it
+			{
+				if (buff[n - 1] != '\\') 
+					quotesCounter++;
+			}
+			else {
+				quotesCounter++;
+			}
+		}
+
 		if (buff[n] == ',')
 		{
-			smallBuff[i] = '\0';
-			table[curRow][column].setContent(smallBuff);
-			//table[curRow][column].print();
-			//std::cout << std::endl;
-			smallBuff = new char[256];
-			column++;
-			i = 0;
+			if (quotesCounter % 2 == 0) // only when we know that a quote has been closed by another can we store content in a cell
+			{
+				smallBuff[i] = '\0';
+				table[curRow][column].setContent(smallBuff);
+				//table[curRow][column].print();
+				//std::cout << std::endl;
+				smallBuff = new char[256];
+				column++;
+				i = 0;
+			}
+			else {
+				smallBuff[i] = buff[n]; // if there is a comma between quotes it should still go in the cell
+				i++;
+			}
 		}
 		else {
-			smallBuff[i] = buff[n];
-			i++;
+			if (buff[n] == ' ') // if a whitespace is outside of quotes it should't be taken into account
+			{
+				if (quotesCounter % 2 == 1)
+				{
+					smallBuff[i] = buff[n];
+					i++;
+				}
+			}
+			else {
+				smallBuff[i] = buff[n];
+				i++;
+			}
 		}
 		if (buff[n + 1] == '\0')
 		{
@@ -139,9 +170,20 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 		}
 		n++;
 	}
-	
+
 	delete[] smallBuff;
 	
+}
+
+void Spreadsheet::removeWhitespaces()
+{
+	for (int i = 0; i < row; i++)
+	{
+		for (int t = 0; t < col; t++)
+		{
+
+		}
+	}
 }
 
 void Spreadsheet::setRows(const int rows)
@@ -181,4 +223,5 @@ void Spreadsheet::testPrint()
 		}
 		std::cout << std::endl;
 	}
+	//table[row - 1][col - 1].print();
 }

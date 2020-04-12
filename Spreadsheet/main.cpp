@@ -8,5 +8,6 @@ int main()
 	cout << "rows: " << t.getRows() << endl;
 	cout << "cols: " << t.getColumns() << endl;
 	t.testPrint();
+	//t.testing();
 	return 0;
 }

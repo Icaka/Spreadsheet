@@ -135,7 +135,8 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 			if (quotesCounter % 2 == 0) // only when we know that a quote has been closed by another can we store content in a cell
 			{
 				smallBuff[i] = '\0';
-				table[curRow][column].setContent(smallBuff);
+				if(i != 0)
+					table[curRow][column].setContent(smallBuff);
 				//table[curRow][column].print();
 				//std::cout << std::endl;
 				smallBuff = new char[256];
@@ -163,18 +164,21 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 		}
 		if (buff[n + 1] == '\0')
 		{
+
 			smallBuff[i] = '\0';
-			table[curRow][column].setContent(smallBuff);
+			if(i != 0)
+				table[curRow][column].setContent(smallBuff);
 			//table[curRow][column].print();
 			//std::cout << std::endl;
 		}
+
 		n++;
 	}
 
 	delete[] smallBuff;
 	
 }
-
+/*
 void Spreadsheet::removeWhitespaces()
 {
 	for (int i = 0; i < row; i++)
@@ -185,7 +189,7 @@ void Spreadsheet::removeWhitespaces()
 		}
 	}
 }
-
+*/
 void Spreadsheet::setRows(const int rows)
 {
 	row = rows;
@@ -219,7 +223,20 @@ void Spreadsheet::testPrint()
 	{
 		for (int t = 0; t < col; t++)
 		{
+			std::cout << "table[" << i << "][" << t << "]: ";
 			table[i][t].print();
+			std::cout << "|" << std::endl;
+		}
+		//std::cout << std::endl;
+	}
+
+	for (int i = 0; i < row; i++)
+	{
+		for (int t = 0; t < col; t++)
+		{
+			std::cout << " ";
+			table[i][t].print();
+			std::cout << " ";
 		}
 		std::cout << std::endl;
 	}

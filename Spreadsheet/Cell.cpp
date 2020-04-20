@@ -53,10 +53,10 @@ void Cell::print() const
 {
 	if (content != '\0')
 	{
-		std::cout << " " << content << " ";
+		std::cout << "" << content;// << " ";
 	}
 	else {
-		std::cout << " empty ";
+		std::cout << "empty";
 	}
 }
 

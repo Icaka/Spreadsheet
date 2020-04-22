@@ -49,6 +49,15 @@ int Cell::getLength() const
 	return strlen(content);
 }
 
+bool Cell::isEmpty()
+{
+	if (content == '\0')
+	{
+		return true;
+	}
+	return false;
+}
+
 void Cell::print() const
 {
 	if (content != '\0')

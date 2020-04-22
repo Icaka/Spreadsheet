@@ -3,6 +3,16 @@
 
 const int MAXN = 1024;
 
+Spreadsheet::Spreadsheet()
+{
+	row = 0;
+	col = 0;
+
+	table = new Cell * [row];
+	for (int i = 0; i < row; ++i)
+		table[i] = new Cell[col];
+}
+
 Spreadsheet::Spreadsheet(const char* fName)
 {
 	fileName = new char[strlen(fName) + 1];
@@ -82,6 +92,32 @@ int Spreadsheet::getNumberOfColumns(std::ifstream& ifs) const
 	ifs.clear();				 //
 	ifs.seekg(0, std::ios::beg); // putting the stream back at the beginning
 	return maxWordsOnARow;
+}
+
+void Spreadsheet::openFile(const char* fName)
+{
+	fileName = new char[strlen(fName) + 1];
+	strcpy_s(fileName, strlen(fName) + 1, fName);
+
+	std::ifstream ifs(fileName);
+
+	if (!ifs.is_open()) {
+
+		std::cout << "failed openning!";
+	}
+	else {
+
+		row = getNumberOfRows(ifs);
+		col = getNumberOfColumns(ifs);
+
+		table = new Cell * [row];
+		for (int i = 0; i < row; ++i)
+			table[i] = new Cell[col];
+
+		fillTable(ifs);
+	}
+
+	ifs.close();
 }
 
 void Spreadsheet::fillTable(std::ifstream& ifs)
@@ -203,6 +239,41 @@ int Spreadsheet::getRows() const
 int Spreadsheet::getColumns() const
 {
 	return col;
+}
+
+void Spreadsheet::save(const char* fName)
+{
+	if (!strcmp(fName, fileName))
+	{
+		remove(fileName);
+	}
+
+	std::ofstream ofs;
+	ofs.open(fName);
+	if (ofs.is_open())
+	{
+		for (int i = 0; i < row; i++)
+		{
+			for (int t = 0; t < col; t++)
+			{
+				if (table[i][t].isEmpty())
+				{
+					ofs << " ";
+				}
+				else {
+					ofs << table[i][t].getContent();
+				}
+				if (t != col - 1)
+					ofs << ",";
+			}
+			ofs << "\n";
+		}
+
+		ofs.close();
+	}
+	else {
+		std::cout << "failed saving" << std::endl;
+	}
 }
 
 void Spreadsheet::testing()

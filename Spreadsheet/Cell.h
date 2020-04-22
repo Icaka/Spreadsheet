@@ -18,5 +18,6 @@ public:
 	void setContent(const char*);
 	int getLength() const;
 
+	bool isEmpty();
 	void print() const;
 };

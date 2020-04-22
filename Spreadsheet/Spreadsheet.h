@@ -14,6 +14,7 @@ protected:
 	void manageLine(const int, const char*); // arguments are row number and the whole (not yet fragmented) row
 	//void removeWhitespaces();
 public:
+	Spreadsheet();
 	Spreadsheet(const char*);
 	~Spreadsheet();
 	int getNumberOfRows(std::ifstream&) const;
@@ -21,8 +22,9 @@ public:
 	void setRows(const int);
 	int getRows() const;
 	int getColumns() const;
-
-
+	void openFile(const char*);
+	//void save();
+	void save(const char*);
 	void testing();
 	void testPrint();
 };

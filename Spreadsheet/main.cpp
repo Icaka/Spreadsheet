@@ -27,7 +27,7 @@ int main()
 				table.openFile(fileName);
 				cout << "rows: " << table.getRows() << endl;
 				cout << "cols: " << table.getColumns() << endl;
-				table.testPrint();
+				//table.testPrint();
 			}
 		}
 
@@ -62,6 +62,17 @@ int main()
 			if (openFile)
 			{
 				table.save(command);
+			}
+			else {
+				cout << "There is no file opened" << endl;
+			}
+		}
+
+		if (!strcmp(command, "print"))
+		{
+			if (openFile)
+			{
+				table.testPrint();
 			}
 			else {
 				cout << "There is no file opened" << endl;

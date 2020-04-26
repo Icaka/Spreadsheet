@@ -15,28 +15,7 @@ Spreadsheet::Spreadsheet()
 
 Spreadsheet::Spreadsheet(const char* fName)
 {
-	fileName = new char[strlen(fName) + 1];
-	strcpy_s(fileName, strlen(fName) + 1, fName);
-
-	std::ifstream ifs(fileName);
-
-	if (!ifs.is_open()) {
-
-		std::cout << "failed openning!";
-	}
-	else {
-
-		row = getNumberOfRows(ifs);
-		col = getNumberOfColumns(ifs);
-
-		table = new Cell * [row];
-		for (int i = 0; i < row; ++i)
-			table[i] = new Cell[col];
-
-		fillTable(ifs);
-	}
-
-	ifs.close();
+	openFile(fName);
 }
 
 Spreadsheet::~Spreadsheet()
@@ -135,18 +114,7 @@ void Spreadsheet::fillTable(std::ifstream& ifs)
 }
 
 void Spreadsheet::manageLine(const int curRow, const char* buff)
-{
-	/*
-	std::cout << buff << std::endl;
-	int i = 0;
-	while (buff[i] != '\0')
-	{
-		std::cout << buff[i];
-		i++;
-	}
-	std::cout << std::endl;
-	*/
-	
+{	
 	char* smallBuff = new char[256];
 	int i = 0;
 	int n = 0;
@@ -173,8 +141,7 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 				smallBuff[i] = '\0';
 				if(i != 0)
 					table[curRow][column].setContent(smallBuff);
-				//table[curRow][column].print();
-				//std::cout << std::endl;
+
 				smallBuff = new char[256];
 				column++;
 				i = 0;
@@ -214,18 +181,7 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 	delete[] smallBuff;
 	
 }
-/*
-void Spreadsheet::removeWhitespaces()
-{
-	for (int i = 0; i < row; i++)
-	{
-		for (int t = 0; t < col; t++)
-		{
 
-		}
-	}
-}
-*/
 void Spreadsheet::setRows(const int rows)
 {
 	row = rows;
@@ -290,6 +246,7 @@ void Spreadsheet::testing()
 
 void Spreadsheet::testPrint()
 {
+	/*
 	for (int i = 0; i < row; i++)
 	{
 		for (int t = 0; t < col; t++)
@@ -300,7 +257,7 @@ void Spreadsheet::testPrint()
 		}
 		//std::cout << std::endl;
 	}
-
+	*/
 	for (int i = 0; i < row; i++)
 	{
 		for (int t = 0; t < col; t++)

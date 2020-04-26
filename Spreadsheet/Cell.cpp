@@ -68,10 +68,3 @@ void Cell::print() const
 		std::cout << "empty";
 	}
 }
-
-/*
-void Cell::cleanContent(char* cleaned)
-{
-
-}
-*/

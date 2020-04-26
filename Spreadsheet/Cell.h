@@ -8,7 +8,7 @@ private:
 protected:
 	void clear();
 	void copy(const Cell&);
-	//void cleanContent(char*); // is used to clean a received word before it's written in content( remove the whitespaces or quotes)
+
 public:
 	Cell();
 	~Cell();

@@ -217,7 +217,7 @@ void Spreadsheet::save(const char* fName)
 					ofs << " ";
 				}
 				else {
-					ofs << table[i][t].getContent();
+					table[i][t].writeToFile(ofs); // ofs << table[i][t].getContent()
 				}
 				if (t != col - 1)
 					ofs << ",";

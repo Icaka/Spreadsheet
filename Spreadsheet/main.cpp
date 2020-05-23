@@ -3,7 +3,7 @@
 using namespace std;
 
 const int MAXN = 256;
-int main()
+int main() //  github repository: https://github.com/Icaka/Spreadsheet
 {
 	Spreadsheet table;
 	bool openFile = false;

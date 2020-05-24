@@ -5,6 +5,8 @@ using namespace std;
 const int MAXN = 256;
 int main() //  github repository: https://github.com/Icaka/Spreadsheet
 {
+	//float ron = (float)1 / (float)2;
+	//cout << "ron : " << ron << endl;
 	Spreadsheet table;
 	bool openFile = false;
 	char* fileName = new char[MAXN];

@@ -7,6 +7,7 @@ private:
 	int intContent;
 	double doubleContent;
 	bool empty;
+	bool formula;
 protected:
 	void clear();
 	void copy(const Cell&);
@@ -26,7 +27,10 @@ public:
 	void setDoubleContent(const double);
 	int getLength() const;
 	void writeToFile(std::ofstream&);
+	float getSumOfCell() const;
 
 	bool isEmpty();
 	void print() const;
+
+	bool isFormula() const;
 };

@@ -13,6 +13,7 @@ protected:
 	void fillTable(std::ifstream&);
 	void manageLine(const int, const char*); // arguments are row number and the whole (not yet fragmented) row
 
+	float getSumOfFormulaMember(const char*);
 public:
 	Spreadsheet();
 	Spreadsheet(const char*);
@@ -27,4 +28,6 @@ public:
 	void save(const char*);
 	void testing();
 	void testPrint();
+
+	float getSumOfFormula(const char*);
 };

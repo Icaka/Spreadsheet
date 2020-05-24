@@ -263,10 +263,139 @@ void Spreadsheet::testPrint()
 		for (int t = 0; t < col; t++)
 		{
 			std::cout << " ";
-			table[i][t].print();
+			if (table[i][t].isFormula())
+			{
+				std::cout << getSumOfFormula(table[i][t].getContent());
+			}
+			else {
+				table[i][t].print();
+			}
+			//table[i][t].print();
 			std::cout << " ";
 		}
 		std::cout << std::endl;
 	}
+
+	//std::cout << "Testing R2C3 + R1C1: " << getSumOfFormula("=R2C3+R1C1") << std::endl;;
 	//table[row - 1][col - 1].print();
+}
+
+float Spreadsheet::getSumOfFormula(const char* form)
+{
+	float result = 0;;
+	char operation = 0;
+	char* member1 = new char[32];
+	int mem1Counter = 0;
+	char* member2 = new char[32];
+	int mem2Counter = 0;
+	bool operationFound = false;
+	int i = 1;
+	do
+	{
+		if (form[i] == '+' || form[i] == '-' || form[i] == '*' || form[i] == '//')
+		{
+			operationFound = true;
+			operation = form[i];
+			member1[mem1Counter] = '\0'; // closing the first member
+		}
+		else {
+			if (!operationFound)
+			{
+				member1[mem1Counter] = form[i];
+				mem1Counter++;
+			}
+			else {
+				member2[mem2Counter] = form[i];
+				mem2Counter++;
+			}
+		}
+
+		i++;
+	} while (i < strlen(form));
+	member2[mem2Counter] = '\0'; // closing the second member
+
+	//std::cout  << "Member 1: " << member1 << std::endl;
+	//std::cout << "Member 2: " << member2 << std::endl;
+	//std::cout << "Member 1 Sum: " << getSumOfFormulaMember(member1) << std::endl;
+
+	if (operation == '+')
+	{
+		result = getSumOfFormulaMember(member1) + getSumOfFormulaMember(member2);
+	}
+	else if (operation == '-') {
+		result = getSumOfFormulaMember(member1) - getSumOfFormulaMember(member2);
+	}
+	else if (operation == '*') {
+		result = getSumOfFormulaMember(member1) * getSumOfFormulaMember(member2);
+	}
+	else if (operation == '//') {
+		if (getSumOfFormulaMember(member2) == 0)
+		{
+			result = 0;
+		}
+		else {
+			result = getSumOfFormulaMember(member1) / getSumOfFormulaMember(member2);
+		}
+	}
+
+	
+	delete[] member1;
+	delete[] member2;
+	return result;
+}
+
+float Spreadsheet::getSumOfFormulaMember(const char* member)
+{
+	float sum = 0;
+	int c = 0;
+	if (member[0] == 'R' || member[0] == 'r')
+	{
+		c = 1;
+		char* firstNum = new char[8];
+		int fNumCounter = 0;
+		char* secondNum = new char[8];
+		int sNumCounter = 0;
+		bool foundC = false;
+		do
+		{
+			if (member[c] == 'C' || member[c] == 'c')
+			{
+				foundC = true;
+				firstNum[fNumCounter] = '\0';
+			}
+			else {
+				if (!foundC)
+				{
+					firstNum[fNumCounter] = member[c];
+					fNumCounter++;
+				}
+				else {
+					secondNum[sNumCounter] = member[c];
+					sNumCounter++;
+				}
+			}
+			c++;
+		} while (c < strlen(member));
+		secondNum[sNumCounter] = '\0';
+
+		//std::cout << "Number 1: " << firstNum << std::endl;
+		//std::cout << "Number 2: " << secondNum << std::endl;
+
+
+		sum = table[atoi(firstNum) - 1][atoi(secondNum) - 1].getSumOfCell();
+		delete[] firstNum;
+		delete[] secondNum;
+		return sum;
+
+	}
+	else {
+		for (int i = 0; i < strlen(member); i++)
+		{
+			if (!isdigit(member[i]))
+				return 0;
+		}
+		return atof(member);
+	}
+
+	return sum;
 }

@@ -8,6 +8,7 @@ Cell::Cell()
 	intContent = 0;
 	doubleContent = 0;
 	empty = true;
+	formula = false;
 }
 
 Cell::~Cell()
@@ -53,6 +54,8 @@ double Cell::getDoubleContent() const
 
 void Cell::setContent(const char* newContent)
 {
+	if (newContent[0] == '=')
+		formula = true;
 	empty = false;
 	if (checkIfInt(newContent))
 	{
@@ -103,6 +106,17 @@ void Cell::writeToFile(std::ofstream& ofs)
 	else {
 		ofs << intContent;
 	}
+}
+
+float Cell::getSumOfCell() const
+{
+	if (empty)
+		return 0;
+	if (content != '\0')
+		return 0;
+	if (doubleContent != 0)
+		return doubleContent;
+	return intContent;
 }
 
 bool Cell::isEmpty()
@@ -181,4 +195,9 @@ bool Cell::checkIfInt(const char* newCon)
 		}
 	}
 	return true;
+}
+
+bool Cell::isFormula() const
+{
+	return formula;
 }

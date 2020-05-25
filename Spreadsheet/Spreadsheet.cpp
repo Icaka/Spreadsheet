@@ -389,10 +389,27 @@ float Spreadsheet::getSumOfFormulaMember(const char* member)
 
 	}
 	else {
+		bool foundPoint = false;
 		for (int i = 0; i < strlen(member); i++)
 		{
 			if (!isdigit(member[i]))
-				return 0;
+			{
+				if (member[i] == '.')
+				{
+					if (!foundPoint)
+					{
+						foundPoint = true;
+					}
+					else {
+						return 0;
+					}
+				}
+				else {
+					return 0;
+				}
+					
+			}
+				//return 0;
 		}
 		return atof(member);
 	}

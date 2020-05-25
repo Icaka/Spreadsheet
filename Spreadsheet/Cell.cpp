@@ -85,7 +85,25 @@ void Cell::setDoubleContent(const double dC)
 
 int Cell::getLength() const
 {
-	return strlen(content);
+	if(content != '\0')
+		return strlen(content);
+	int digits = 0;
+	if (intContent != 0)
+	{
+		int num = intContent;
+		if (num < 0)
+			digits = 1;
+		while (num) {
+			num /= 10;
+			digits++;
+		}
+		return digits;
+	}
+	if (doubleContent != 0)
+	{
+
+	}
+	return 0;
 }
 
 void Cell::writeToFile(std::ofstream& ofs)
@@ -124,6 +142,7 @@ float Cell::getSumOfCell() const
 void Cell::edit(const char* newContent)
 {
 	clear();
+	formula = false;
 	setContent(newContent);
 }
 

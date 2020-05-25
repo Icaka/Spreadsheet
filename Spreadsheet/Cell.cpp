@@ -35,6 +35,8 @@ void Cell::copy(const Cell& other)
 void Cell::clear()
 {
 	delete[] content;
+	intContent = 0;
+	doubleContent = 0;
 }
 
 char* Cell::getContent() const
@@ -117,6 +119,12 @@ float Cell::getSumOfCell() const
 	if (doubleContent != 0)
 		return doubleContent;
 	return intContent;
+}
+
+void Cell::edit(const char* newContent)
+{
+	clear();
+	setContent(newContent);
 }
 
 bool Cell::isEmpty()

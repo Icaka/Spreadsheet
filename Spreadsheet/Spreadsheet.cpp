@@ -399,3 +399,18 @@ float Spreadsheet::getSumOfFormulaMember(const char* member)
 
 	return sum;
 }
+
+void Spreadsheet::editCell(const int r, const int c, const char* text)
+{
+	if (r <= 0 || r > row)
+	{
+		std::cout << "Row out of boundaries" << std::endl;
+		return;
+	}
+	if (c <= 0 || c > col)
+	{
+		std::cout << "Column out of boundaries" << std::endl;
+		return;
+	}
+	table[r - 1][c - 1].edit(text);
+}

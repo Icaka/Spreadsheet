@@ -29,6 +29,7 @@ public:
 	void writeToFile(std::ofstream&);
 	float getSumOfCell() const;
 
+	void edit(const char*);
 	bool isEmpty();
 	void print() const;
 

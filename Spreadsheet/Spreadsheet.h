@@ -30,4 +30,5 @@ public:
 	void testPrint();
 
 	float getSumOfFormula(const char*);
+	void editCell(const int, const int, const char*);
 };

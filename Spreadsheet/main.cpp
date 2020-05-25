@@ -11,6 +11,9 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 	bool openFile = false;
 	char* fileName = new char[MAXN];
 	char* command = new char[MAXN];
+	int i, t; // for command "edit"
+	char* newContent = new char[MAXN]; // for command "edit"
+
 	while (true)
 	{
 		cout << "Input command: ";
@@ -81,6 +84,20 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 			}
 		}
 
+		if (!strcmp(command, "edit"))
+		{
+			if (openFile)
+			{
+				cin >> i;
+				cin >> t;
+				cin >> newContent;
+				table.editCell(i, t, newContent);
+			}
+			else {
+				cout << "There is no file opened" << endl;
+			}
+		}
+
 		if (!strcmp(command, "help"))
 		{
 			cout << "The following commands are supported : " << endl
@@ -101,7 +118,7 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 
 	delete[] fileName;
 	delete[] command;
-
+	delete[] newContent;
 	/*
 	Spreadsheet t("test.txt");
 	cout << "ro;ws: " << t.getRows() << endl;

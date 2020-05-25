@@ -32,6 +32,7 @@ public:
 	void edit(const char*);
 	bool isEmpty();
 	void print() const;
+	void printCharContent() const;
 
 	bool isFormula() const;
 };

@@ -148,7 +148,8 @@ void Cell::print() const
 	}
 	if (content != '\0')
 	{
-		std::cout << "" << content;// << " ";
+		printCharContent();
+		//std::cout << "" << content;// << " ";
 	}
 	else {
 		if (intContent == 0)
@@ -163,6 +164,39 @@ void Cell::print() const
 		}
 		else {
 			std::cout << intContent;
+		}
+	}
+}
+
+void Cell::printCharContent() const
+{
+	size_t len = strlen(content);
+	for (int i = 0; i < len; i++)
+	{
+		if (content[i] == '"')
+		{
+			if (i != 0)  // if a quote is the first element on a row it can't have a \ before it
+			{
+				if (content[i - 1] == '\\') // if a quote doesn't have a '\' before it, it shoudn't be written
+				{
+					std::cout << content[i];
+				}
+			}
+		}
+		else if (content[i] == '\\') {
+			if (i + 1 != len)
+			{
+				if (content[i + 1] != '"') // if a '\' has a quote after it, it shouldn't be written 
+				{
+					std::cout << content[i];
+				}
+			}
+			else {
+				std::cout << content[i];
+			}
+		}
+		else {
+			std::cout << content[i];
 		}
 	}
 }

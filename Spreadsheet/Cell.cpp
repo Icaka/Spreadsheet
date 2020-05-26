@@ -142,6 +142,8 @@ float Cell::getSumOfCell() const
 void Cell::edit(const char* newContent)
 {
 	clear();
+	content = '\0';
+
 	formula = false;
 	setContent(newContent);
 }

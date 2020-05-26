@@ -2,6 +2,7 @@
 #include <iostream>
 
 const int MAXN = 1024;
+const int error = 420; // will use this for error checkings
 
 Spreadsheet::Spreadsheet()
 {
@@ -265,7 +266,14 @@ void Spreadsheet::testPrint()
 			std::cout << " ";
 			if (table[i][t].isFormula())
 			{
-				std::cout << getSumOfFormula(table[i][t].getContent());
+				if (getSumOfFormula(table[i][t].getContent()) == error)
+				{
+					std::cout << "ERROR";
+				}
+				else {
+					std::cout << getSumOfFormula(table[i][t].getContent());
+				}
+				//std::cout << getSumOfFormula(table[i][t].getContent());
 			}
 			else {
 				table[i][t].print();
@@ -292,7 +300,7 @@ float Spreadsheet::getSumOfFormula(const char* form)
 	int i = 1;
 	do
 	{
-		if (form[i] == '+' || form[i] == '-' || form[i] == '*' || form[i] == '//')
+		if (form[i] == '+' || form[i] == '-' || form[i] == '*' || form[i] == '/')
 		{
 			operationFound = true;
 			operation = form[i];
@@ -318,6 +326,8 @@ float Spreadsheet::getSumOfFormula(const char* form)
 	//std::cout << "Member 2: " << member2 << std::endl;
 	//std::cout << "Member 1 Sum: " << getSumOfFormulaMember(member1) << std::endl;
 
+	
+
 	if (operation == '+')
 	{
 		result = getSumOfFormulaMember(member1) + getSumOfFormulaMember(member2);
@@ -328,10 +338,10 @@ float Spreadsheet::getSumOfFormula(const char* form)
 	else if (operation == '*') {
 		result = getSumOfFormulaMember(member1) * getSumOfFormulaMember(member2);
 	}
-	else if (operation == '//') {
+	else if (operation == '/') {
 		if (getSumOfFormulaMember(member2) == 0)
 		{
-			result = 0;
+			result = error;
 		}
 		else {
 			result = getSumOfFormulaMember(member1) / getSumOfFormulaMember(member2);
@@ -392,6 +402,8 @@ float Spreadsheet::getSumOfFormulaMember(const char* member)
 		bool foundPoint = false;
 		for (int i = 0; i < strlen(member); i++)
 		{
+			if (member[i] == '-' && i == 0)
+				continue;
 			if (!isdigit(member[i]))
 			{
 				if (member[i] == '.')

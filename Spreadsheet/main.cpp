@@ -90,7 +90,17 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 			{
 				cin >> i;
 				cin >> t;
-				cin >> newContent;
+				cin.getline(newContent, MAXN);
+
+				int p = 0, q = 0;//--------------------------------------------------
+				while (newContent[p])
+				{
+					if (newContent[p] != ' ')
+						newContent[q++] = newContent[p];	//parses whitespaces 
+					p++;
+				}
+				newContent[q] = '\0';//----------------------------------------------
+
 				table.editCell(i, t, newContent);
 			}
 			else {

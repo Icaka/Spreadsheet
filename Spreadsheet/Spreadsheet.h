@@ -28,6 +28,7 @@ public:
 	void save(const char*);
 	void testing();
 	void testPrint();
+	void prettyPrint();
 
 	float getSumOfFormula(const char*);
 	void editCell(const int, const int, const char*);

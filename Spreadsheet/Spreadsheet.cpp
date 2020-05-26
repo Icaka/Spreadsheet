@@ -1,5 +1,6 @@
 #include "Spreadsheet.h"
 #include <iostream>
+#include <iomanip>
 
 const int MAXN = 1024;
 const int error = 420; // will use this for error checkings
@@ -286,6 +287,37 @@ void Spreadsheet::testPrint()
 
 	//std::cout << "Testing R2C3 + R1C1: " << getSumOfFormula("=R2C3+R1C1") << std::endl;;
 	//table[row - 1][col - 1].print();
+}
+
+void Spreadsheet::prettyPrint()
+{
+	int p = 15;
+	for (int i = 0; i < row; i++)
+	{
+		for (int t = 0; t < col; t++)
+		{
+			//std::cout << " ";
+			if (table[i][t].isFormula())
+			{
+				if (getSumOfFormula(table[i][t].getContent()) == error)
+				{
+					std::cout << "ERROR";
+					if (t != (col - 1))
+						std::cout  << std::setw(p - 5) << "|";
+				}
+				else {
+					std::cout << getSumOfFormula(table[i][t].getContent());
+				}
+			}
+			else {
+				table[i][t].print();
+				if (t != (col - 1))
+					std::cout  << std::setw(p - table[i][t].getPhysicalLength()) << "|";
+			}
+			//std::cout << " ";
+		}
+		std::cout << std::endl;
+	}
 }
 
 float Spreadsheet::getSumOfFormula(const char* form)

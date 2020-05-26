@@ -9,6 +9,7 @@ Cell::Cell()
 	doubleContent = 0;
 	empty = true;
 	formula = false;
+	physicalLength = 0;
 }
 
 Cell::~Cell()
@@ -37,6 +38,7 @@ void Cell::clear()
 	delete[] content;
 	intContent = 0;
 	doubleContent = 0;
+	physicalLength = 0;
 }
 
 char* Cell::getContent() const
@@ -56,6 +58,7 @@ double Cell::getDoubleContent() const
 
 void Cell::setContent(const char* newContent)
 {
+	physicalLength = strlen(newContent);
 	if (newContent[0] == '=')
 		formula = true;
 	empty = false;
@@ -71,6 +74,8 @@ void Cell::setContent(const char* newContent)
 	}
 	content = new char[strlen(newContent) + 1];
 	strcpy_s(content, strlen(newContent) + 1, newContent);
+	checkQuotes();
+	//physicalLength = strlen(newContent);
 }
 
 void Cell::setIntContent(const int iC)
@@ -83,10 +88,12 @@ void Cell::setDoubleContent(const double dC)
 	doubleContent = dC;
 }
 
-int Cell::getLength() const
+int Cell::getPhysicalLength() const
 {
+	if (empty)
+		return 5;
 	if(content != '\0')
-		return strlen(content);
+		return physicalLength;
 	int digits = 0;
 	if (intContent != 0)
 	{
@@ -101,6 +108,11 @@ int Cell::getLength() const
 	}
 	if (doubleContent != 0)
 	{
+		size_t len;
+		char* buff = new char[50];
+		len = sprintf_s(buff, 50, "%0.2f", doubleContent);
+		delete[] buff;
+		return len;
 
 	}
 	return 0;
@@ -180,7 +192,8 @@ void Cell::print() const
 				std::cout << 0;
 			}
 			else {
-				std::cout << doubleContent;
+				//std::cout << doubleContent;
+				printf("%0.2f", doubleContent); // printing it until the second digit after the point
 			}
 		}
 		else {
@@ -263,4 +276,35 @@ bool Cell::checkIfInt(const char* newCon)
 bool Cell::isFormula() const
 {
 	return formula;
+}
+
+void Cell::checkQuotes()
+{
+	size_t len = strlen(content);
+	for (int i = 0; i < len; i++)
+	{
+		if (content[i] == '"')
+		{
+			if (i != 0)  // if a quote is the first element on a row it can't have a \ before it
+			{
+				if (content[i - 1] != '\\') // if a quote doesn't have a '\' before it, it shoudn't be written
+				{
+					physicalLength--;
+				}
+			}
+			else {
+				physicalLength--;
+			}
+		}
+		else if (content[i] == '\\') {
+			if (i + 1 != len)
+			{
+				if (content[i + 1] == '"') // if a '\' has a quote after it, it shouldn't be written 
+				{
+					physicalLength = physicalLength - 1;
+					i++;
+				}
+			}
+		}
+	}
 }

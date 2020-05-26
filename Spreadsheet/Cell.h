@@ -8,6 +8,7 @@ private:
 	double doubleContent;
 	bool empty;
 	bool formula;
+	size_t physicalLength; // used mainly when printing the table
 protected:
 	void clear();
 	void copy(const Cell&);
@@ -25,7 +26,7 @@ public:
 	void setContent(const char*);
 	void setIntContent(const int);
 	void setDoubleContent(const double);
-	int getLength() const;
+	int getPhysicalLength() const;
 	void writeToFile(std::ofstream&);
 	float getSumOfCell() const;
 
@@ -35,4 +36,5 @@ public:
 	void printCharContent() const;
 
 	bool isFormula() const;
+	void checkQuotes(); // will remove physical length for every quote and dash that wouldn't be printed
 };

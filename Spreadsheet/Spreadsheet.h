@@ -30,6 +30,6 @@ public:
 	void testPrint();
 	void prettyPrint();
 
-	float getSumOfFormula(const char*);
+	bool getSumOfFormula(const char*, double&);
 	void editCell(const int, const int, const char*);
 };

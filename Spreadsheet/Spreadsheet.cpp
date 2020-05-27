@@ -267,12 +267,13 @@ void Spreadsheet::testPrint()
 			std::cout << " ";
 			if (table[i][t].isFormula())
 			{
-				if (getSumOfFormula(table[i][t].getContent()) == error)
+				double res;
+				if (!getSumOfFormula(table[i][t].getContent(), res))
 				{
 					std::cout << "ERROR";
 				}
 				else {
-					std::cout << getSumOfFormula(table[i][t].getContent());
+					std::cout << res;
 				}
 				//std::cout << getSumOfFormula(table[i][t].getContent());
 			}
@@ -299,14 +300,15 @@ void Spreadsheet::prettyPrint()
 			//std::cout << " ";
 			if (table[i][t].isFormula())
 			{
-				if (getSumOfFormula(table[i][t].getContent()) == error)
+				double res;
+				if (!getSumOfFormula(table[i][t].getContent(), res))
 				{
 					std::cout << "ERROR";
 					if (t != (col - 1))
 						std::cout  << std::setw(p - 5) << "|";
 				}
 				else {
-					std::cout << getSumOfFormula(table[i][t].getContent());
+					std::cout << res;
 				}
 			}
 			else {
@@ -320,7 +322,7 @@ void Spreadsheet::prettyPrint()
 	}
 }
 
-float Spreadsheet::getSumOfFormula(const char* form)
+bool Spreadsheet::getSumOfFormula(const char* form, double& sum)
 {
 	float result = 0;;
 	char operation = 0;
@@ -373,17 +375,19 @@ float Spreadsheet::getSumOfFormula(const char* form)
 	else if (operation == '/') {
 		if (getSumOfFormulaMember(member2) == 0)
 		{
-			result = error;
+			delete[] member1;
+			delete[] member2;
+			return false;
 		}
 		else {
 			result = getSumOfFormulaMember(member1) / getSumOfFormulaMember(member2);
 		}
 	}
 
-	
+	sum = result;
 	delete[] member1;
 	delete[] member2;
-	return result;
+	return true;
 }
 
 float Spreadsheet::getSumOfFormulaMember(const char* member)

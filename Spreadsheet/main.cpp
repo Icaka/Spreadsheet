@@ -78,7 +78,8 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 			if (openFile)
 			{
 				table.testPrint();
-				table.prettyPrint();
+				cout << endl;
+				//table.prettyPrint();
 			}
 			else {
 				cout << "There is no file opened" << endl;

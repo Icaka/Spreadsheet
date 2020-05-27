@@ -394,9 +394,9 @@ bool Spreadsheet::getSumOfFormula(const char* form, double& sum)
 	return true;
 }
 
-float Spreadsheet::getSumOfFormulaMember(const char* member)
+double Spreadsheet::getSumOfFormulaMember(const char* member)
 {
-	float sum = 0;
+	double sum = 0;
 	int c = 0;
 	if (member[0] == 'R' || member[0] == 'r')
 	{
@@ -431,8 +431,17 @@ float Spreadsheet::getSumOfFormulaMember(const char* member)
 		//std::cout << "Number 1: " << firstNum << std::endl;
 		//std::cout << "Number 2: " << secondNum << std::endl;
 
-
-		sum = table[atoi(firstNum) - 1][atoi(secondNum) - 1].getSumOfCell();
+		if (table[atoi(firstNum) - 1][atoi(secondNum) - 1].isFormula())
+		{
+			if (!getSumOfFormula(table[atoi(firstNum) - 1][atoi(secondNum) - 1].getContent(), sum))
+			{
+				return 0;
+			}
+		}
+		else {
+			sum = table[atoi(firstNum) - 1][atoi(secondNum) - 1].getSumOfCell();
+		}
+		//sum = table[atoi(firstNum) - 1][atoi(secondNum) - 1].getSumOfCell();
 		delete[] firstNum;
 		delete[] secondNum;
 		return sum;

@@ -94,15 +94,26 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 				cin >> t;
 				cin.getline(newContent, MAXN);
 
-				int p = 0, q = 0;//--------------------------------------------------
-				while (newContent[p])
+				if (!(newContent[1] == '"' && newContent[strlen(newContent) - 1] == '"'))
 				{
-					if (newContent[p] != ' ')
-						newContent[q++] = newContent[p];	//parses whitespaces 
-					p++;
+					int p = 0, q = 0;//--------------------------------------------------
+					while (newContent[p])
+					{
+						if (newContent[p] != ' ')
+							newContent[q++] = newContent[p];	//parses all whitespaces 
+						p++;
+					}
+					newContent[q] = '\0';//----------------------------------------------
 				}
-				newContent[q] = '\0';//----------------------------------------------
-
+				else {
+					int p = 0, q = 1;//--------------------------------------------------
+					while (p < strlen(newContent))
+					{
+						newContent[p] = newContent[q];       // removes first whitespace left from getline()
+						p++;
+						q++;
+					}//------------------------------------------------------------------
+				}
 				table.editCell(i, t, newContent);
 			}
 			else {

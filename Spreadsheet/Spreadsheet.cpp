@@ -308,7 +308,11 @@ void Spreadsheet::prettyPrint()
 						std::cout  << std::setw(p - 5) << "|";
 				}
 				else {
-					std::cout << res;
+					char* printRes = new char[50];
+					int n = sprintf_s(printRes, 50, "%0.4f", res);
+					//std::cout << res;
+					std::cout << printRes << std::setw(p - n) << "|";
+					delete[] printRes;
 				}
 			}
 			else {

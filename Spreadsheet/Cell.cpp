@@ -92,30 +92,8 @@ int Cell::getPhysicalLength() const
 {
 	if (empty)
 		return 5;
-	if(content != '\0')
-		return physicalLength;
-	int digits = 0;
-	if (intContent != 0)
-	{
-		int num = intContent;
-		if (num < 0)
-			digits = 1;
-		while (num) {
-			num /= 10;
-			digits++;
-		}
-		return digits;
-	}
-	if (doubleContent != 0)
-	{
-		size_t len;
-		char* buff = new char[50];
-		len = sprintf_s(buff, 50, "%0.2f", doubleContent);
-		delete[] buff;
-		return len;
-
-	}
-	return 0;
+	
+	return physicalLength;
 }
 
 void Cell::writeToFile(std::ofstream& ofs)
@@ -162,13 +140,6 @@ void Cell::edit(const char* newContent)
 
 bool Cell::isEmpty()
 {
-	/*
-	if (content == '\0')
-	{
-		return true;
-	}
-	return false;
-	*/
 	return empty;
 }
 
@@ -182,7 +153,6 @@ void Cell::print() const
 	if (content != '\0')
 	{
 		printCharContent();
-		//std::cout << "" << content;// << " ";
 	}
 	else {
 		if (intContent == 0)
@@ -192,7 +162,6 @@ void Cell::print() const
 				std::cout << 0;
 			}
 			else {
-				//std::cout << doubleContent;
 				printf("%0.2f", doubleContent); // printing it until the second digit after the point
 			}
 		}
@@ -267,6 +236,8 @@ bool Cell::checkIfInt(const char* newCon)
 	{
 		if (!isdigit(newCon[i]))
 		{
+			if (newCon[i] == '-' && i == 0)
+				continue;
 			return false;
 		}
 	}

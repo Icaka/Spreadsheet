@@ -3,7 +3,6 @@
 #include <iomanip>
 
 const int MAXN = 1024;
-const int error = 420; // will use this for error checkings
 
 Spreadsheet::Spreadsheet()
 {
@@ -25,6 +24,7 @@ Spreadsheet::~Spreadsheet()
 	for (int i = 0; i < row; ++i)
 		delete[] table[i];
 	delete[] table;
+	delete[] fileName;
 }
 
 int Spreadsheet::getNumberOfRows(std::ifstream& ifs) const
@@ -173,8 +173,7 @@ void Spreadsheet::manageLine(const int curRow, const char* buff)
 			smallBuff[i] = '\0';
 			if(i != 0)
 				table[curRow][column].setContent(smallBuff);
-			//table[curRow][column].print();
-			//std::cout << std::endl;
+
 		}
 
 		n++;
@@ -248,18 +247,6 @@ void Spreadsheet::testing()
 
 void Spreadsheet::testPrint()
 {
-	/*
-	for (int i = 0; i < row; i++)
-	{
-		for (int t = 0; t < col; t++)
-		{
-			std::cout << "table[" << i << "][" << t << "]: ";
-			table[i][t].print();
-			std::cout << "|" << std::endl;
-		}
-		//std::cout << std::endl;
-	}
-	*/
 	for (int i = 0; i < row; i++)
 	{
 		for (int t = 0; t < col; t++)
@@ -275,12 +262,10 @@ void Spreadsheet::testPrint()
 				else {
 					std::cout << res;
 				}
-				//std::cout << getSumOfFormula(table[i][t].getContent());
 			}
 			else {
 				table[i][t].print();
 			}
-			//table[i][t].print();
 			std::cout << " ";
 		}
 		std::cout << std::endl;
@@ -297,7 +282,6 @@ void Spreadsheet::prettyPrint()
 	{
 		for (int t = 0; t < col; t++)
 		{
-			//std::cout << " ";
 			if (table[i][t].isFormula())
 			{
 				double res;
@@ -310,7 +294,6 @@ void Spreadsheet::prettyPrint()
 				else {
 					char* printRes = new char[50];
 					int n = sprintf_s(printRes, 50, "%0.4f", res);
-					//std::cout << res;
 					std::cout << printRes << std::setw(p - n) << "|";
 					delete[] printRes;
 				}
@@ -320,7 +303,6 @@ void Spreadsheet::prettyPrint()
 				if (t != (col - 1))
 					std::cout  << std::setw(p - table[i][t].getPhysicalLength()) << "|";
 			}
-			//std::cout << " ";
 		}
 		std::cout << std::endl;
 	}
@@ -338,8 +320,39 @@ bool Spreadsheet::getSumOfFormula(const char* form, double& sum)
 	int i = 1;
 	do
 	{
+
 		if (form[i] == '+' || form[i] == '-' || form[i] == '*' || form[i] == '/')
 		{
+			if (i == 1)
+			{
+				if (form[i] == '-')
+				{
+					member1[mem1Counter] = form[i];
+					mem1Counter++;
+					i++;
+					continue;
+				}
+				else {
+					delete[] member1;
+					delete[] member2;
+					return false;
+				}
+			}
+			if (operationFound)
+			{
+				if (form[i - 1] == operation && form[i] == '-')
+				{
+					member2[mem2Counter] = form[i];
+					mem2Counter++;
+					i++;
+					continue;
+				}
+				else {
+					delete[] member1;
+					delete[] member2;
+					return false;
+				}
+			}
 			operationFound = true;
 			operation = form[i];
 			member1[mem1Counter] = '\0'; // closing the first member
@@ -449,13 +462,26 @@ double Spreadsheet::getSumOfFormulaMember(const char* member)
 	}
 	else {
 		bool foundPoint = false;
+		//bool foundMinus = false;
 		for (int i = 0; i < strlen(member); i++)
 		{
 			if (member[i] == '-' && i == 0)
 				continue;
 			if (!isdigit(member[i]))
 			{
-				if (member[i] == '.')
+				/*
+				if (member[i] == '-')
+				{
+					if (!foundMinus)
+					{
+						foundMinus = true;
+					}
+					else {
+						return 0;
+					}
+				}
+				else*/ 
+				if (member[i] == '.') 
 				{
 					if (!foundPoint)
 					{
@@ -470,7 +496,6 @@ double Spreadsheet::getSumOfFormulaMember(const char* member)
 				}
 					
 			}
-				//return 0;
 		}
 		return atof(member);
 	}

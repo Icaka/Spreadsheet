@@ -5,8 +5,6 @@ using namespace std;
 const int MAXN = 256;
 int main() //  github repository: https://github.com/Icaka/Spreadsheet
 {
-	//float ron = (float)1 / (float)2;
-	//cout << "ron : " << ron << endl;
 	Spreadsheet table;
 	bool openFile = false;
 	char* fileName = new char[MAXN];
@@ -32,7 +30,6 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 				table.openFile(fileName);
 				cout << "rows: " << table.getRows() << endl;
 				cout << "cols: " << table.getColumns() << endl;
-				//table.testPrint();
 			}
 		}
 
@@ -77,7 +74,7 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 		{
 			if (openFile)
 			{
-				table.testPrint();
+				//table.testPrint();
 				cout << endl;
 				table.prettyPrint();
 			}
@@ -142,12 +139,6 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 	delete[] fileName;
 	delete[] command;
 	delete[] newContent;
-	/*
-	Spreadsheet t("test.txt");
-	cout << "ro;ws: " << t.getRows() << endl;
-	cout << "cols: " << t.getColumns() << endl;
-	t.testPrint();
-	//t.testing();
-	*/
+	
 	return 0;
 }

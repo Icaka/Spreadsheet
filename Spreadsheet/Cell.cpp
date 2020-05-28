@@ -75,7 +75,6 @@ void Cell::setContent(const char* newContent)
 	content = new char[strlen(newContent) + 1];
 	strcpy_s(content, strlen(newContent) + 1, newContent);
 	checkQuotes();
-	//physicalLength = strlen(newContent);
 }
 
 void Cell::setIntContent(const int iC)

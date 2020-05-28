@@ -12,6 +12,8 @@ Spreadsheet::Spreadsheet()
 	table = new Cell * [row];
 	for (int i = 0; i < row; ++i)
 		table[i] = new Cell[col];
+	fileName = new char[1];
+	fileName = '\0';
 }
 
 Spreadsheet::Spreadsheet(const char* fName)
@@ -84,7 +86,7 @@ bool Spreadsheet::openFile(const char* fName)
 
 	if (!ifs.is_open()) {
 
-		std::cout << "failed openning!";
+		std::cout << "failed openning!" << std::endl;
 		return false;
 	}
 	else {
@@ -98,8 +100,8 @@ bool Spreadsheet::openFile(const char* fName)
 
 		fillTable(ifs);
 	}
-	return true;
 	ifs.close();
+	return true;
 }
 
 void Spreadsheet::fillTable(std::ifstream& ifs)
@@ -271,40 +273,38 @@ void Spreadsheet::testPrint()
 		}
 		std::cout << std::endl;
 	}
-
-	//std::cout << "Testing R2C3 + R1C1: " << getSumOfFormula("=R2C3+R1C1") << std::endl;;
-	//table[row - 1][col - 1].print();
 }
 
 void Spreadsheet::prettyPrint()
 {
-	int p = 15;
+	int cellWidth;
 	for (int i = 0; i < row; i++)
 	{
 		for (int t = 0; t < col; t++)
 		{
+			cellWidth = getLongestElementInColumn(t);
 			if (table[i][t].isFormula())
 			{
-				double res;
+				double res; // result
 				if (!getSumOfFormula(table[i][t].getContent(), res))
 				{
 					std::cout << "ERROR";
 					if (t != (col - 1))
-						std::cout << std::setw(p - 5) << "|";
+						std::cout << std::setw(cellWidth - 5) << "|";
 				}
 				else {
 					char* printRes = new char[50];
-					int n = sprintf_s(printRes, 50, "%0.4f", res);
+					int n = sprintf_s(printRes, 50, "%0.3f", res);
 					std::cout << printRes;
 					if (t != (col - 1)) 
-						std::cout << std::setw(p - n) << "|";
+						std::cout << std::setw(cellWidth - n) << "|";
 					delete[] printRes;
 				}
 			}
 			else {
 				table[i][t].print();
 				if (t != (col - 1))
-					std::cout << std::setw(p - table[i][t].getPhysicalLength()) << "|";
+					std::cout << std::setw(cellWidth - table[i][t].getPhysicalLength()) <<"|";
 			}
 		}
 		std::cout << std::endl;
@@ -376,11 +376,6 @@ bool Spreadsheet::getSumOfFormula(const char* form, double& sum)
 	} while (i < strlen(form));
 	member2[mem2Counter] = '\0'; // closing the second member
 
-	//std::cout  << "Member 1: " << member1 << std::endl;
-	//std::cout << "Member 2: " << member2 << std::endl;
-	//std::cout << "Member 1 Sum: " << getSumOfFormulaMember(member1) << std::endl;
-
-	
 
 	if (operation == '+')
 	{
@@ -459,8 +454,6 @@ double Spreadsheet::getSumOfFormulaMember(const char* member)
 		} while (c < strlen(member));
 		secondNum[sNumCounter] = '\0';
 
-		//std::cout << "Number 1: " << firstNum << std::endl;
-		//std::cout << "Number 2: " << secondNum << std::endl;
 		if ((atoi(firstNum) - 1) < 0 || (atoi(firstNum) - 1) >= row || (atoi(secondNum) - 1) < 0 || (atoi(secondNum) - 1) >= col)
 		{
 			sum = 0;
@@ -475,7 +468,7 @@ double Spreadsheet::getSumOfFormulaMember(const char* member)
 		else {
 			sum = table[atoi(firstNum) - 1][atoi(secondNum) - 1].getSumOfCell();
 		}
-		//sum = table[atoi(firstNum) - 1][atoi(secondNum) - 1].getSumOfCell();
+		
 		delete[] firstNum;
 		delete[] secondNum;
 		return sum;
@@ -483,25 +476,12 @@ double Spreadsheet::getSumOfFormulaMember(const char* member)
 	}
 	else {
 		bool foundPoint = false;
-		//bool foundMinus = false;
 		for (int i = 0; i < strlen(member); i++)
 		{
 			if (member[i] == '-' && i == 0)
 				continue;
 			if (!isdigit(member[i]))
 			{
-				/*
-				if (member[i] == '-')
-				{
-					if (!foundMinus)
-					{
-						foundMinus = true;
-					}
-					else {
-						return 0;
-					}
-				}
-				else*/ 
 				if (member[i] == '.') 
 				{
 					if (!foundPoint)
@@ -537,4 +517,18 @@ void Spreadsheet::editCell(const int r, const int c, const char* text)
 		return;
 	}
 	table[r - 1][c - 1].edit(text);
+}
+
+int Spreadsheet::getLongestElementInColumn(const int c)
+{
+	
+	int longest = 10; // minimal width of cell
+	for (int i = 0; i < row; i++)
+	{
+		if (table[i][c].getPhysicalLength() > longest)
+		{
+			longest = table[i][c].getPhysicalLength();
+		}
+	}
+	return longest + 1;
 }

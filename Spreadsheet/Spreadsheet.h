@@ -14,6 +14,7 @@ protected:
 	void manageLine(const int, const char*); // arguments are row number and the whole (not yet fragmented) row
 
 	double getSumOfFormulaMember(const char*);
+	int getLongestElementInColumn(const int); // only used to determine the width of the cell when printing to the console
 public:
 	Spreadsheet();
 	Spreadsheet(const char*);

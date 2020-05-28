@@ -25,7 +25,6 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 			}
 			else {
 				cin >> fileName;
-				//openFile = true;
 
 				if (table.openFile(fileName))
 				{

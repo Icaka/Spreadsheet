@@ -23,7 +23,7 @@ public:
 	void setRows(const int);
 	int getRows() const;
 	int getColumns() const;
-	void openFile(const char*);
+	bool openFile(const char*);
 	//void save();
 	void save(const char*);
 	void testing();

@@ -75,7 +75,7 @@ int Spreadsheet::getNumberOfColumns(std::ifstream& ifs) const
 	return maxWordsOnARow;
 }
 
-void Spreadsheet::openFile(const char* fName)
+bool Spreadsheet::openFile(const char* fName)
 {
 	fileName = new char[strlen(fName) + 1];
 	strcpy_s(fileName, strlen(fName) + 1, fName);
@@ -85,6 +85,7 @@ void Spreadsheet::openFile(const char* fName)
 	if (!ifs.is_open()) {
 
 		std::cout << "failed openning!";
+		return false;
 	}
 	else {
 
@@ -97,7 +98,7 @@ void Spreadsheet::openFile(const char* fName)
 
 		fillTable(ifs);
 	}
-
+	return true;
 	ifs.close();
 }
 
@@ -289,19 +290,21 @@ void Spreadsheet::prettyPrint()
 				{
 					std::cout << "ERROR";
 					if (t != (col - 1))
-						std::cout  << std::setw(p - 5) << "|";
+						std::cout << std::setw(p - 5) << "|";
 				}
 				else {
 					char* printRes = new char[50];
 					int n = sprintf_s(printRes, 50, "%0.4f", res);
-					std::cout << printRes << std::setw(p - n) << "|";
+					std::cout << printRes;
+					if (t != (col - 1)) 
+						std::cout << std::setw(p - n) << "|";
 					delete[] printRes;
 				}
 			}
 			else {
 				table[i][t].print();
 				if (t != (col - 1))
-					std::cout  << std::setw(p - table[i][t].getPhysicalLength()) << "|";
+					std::cout << std::setw(p - table[i][t].getPhysicalLength()) << "|";
 			}
 		}
 		std::cout << std::endl;
@@ -321,7 +324,7 @@ bool Spreadsheet::getSumOfFormula(const char* form, double& sum)
 	do
 	{
 
-		if (form[i] == '+' || form[i] == '-' || form[i] == '*' || form[i] == '/')
+		if (form[i] == '+' || form[i] == '-' || form[i] == '*' || form[i] == '/' || form[i] == '^')
 		{
 			if (i == 1)
 			{
@@ -400,6 +403,21 @@ bool Spreadsheet::getSumOfFormula(const char* form, double& sum)
 			result = getSumOfFormulaMember(member1) / getSumOfFormulaMember(member2);
 		}
 	}
+	else if (operation == '^') {
+		int power = (int)getSumOfFormulaMember(member2);
+		if (power != 0)
+		{
+			if (power < 0)
+				power = power * (-1);
+			double var = getSumOfFormulaMember(member1);
+			result = var;
+			for (int i = 1; i < power; i++)
+				result = result * var;
+		}
+		else {
+			result = 1;
+		}
+	}
 
 	sum = result;
 	delete[] member1;
@@ -443,12 +461,15 @@ double Spreadsheet::getSumOfFormulaMember(const char* member)
 
 		//std::cout << "Number 1: " << firstNum << std::endl;
 		//std::cout << "Number 2: " << secondNum << std::endl;
-
-		if (table[atoi(firstNum) - 1][atoi(secondNum) - 1].isFormula())
+		if ((atoi(firstNum) - 1) < 0 || (atoi(firstNum) - 1) >= row || (atoi(secondNum) - 1) < 0 || (atoi(secondNum) - 1) >= col)
+		{
+			sum = 0;
+		}
+		else if (table[atoi(firstNum) - 1][atoi(secondNum) - 1].isFormula()) 
 		{
 			if (!getSumOfFormula(table[atoi(firstNum) - 1][atoi(secondNum) - 1].getContent(), sum))
 			{
-				return 0;
+				sum = 0;
 			}
 		}
 		else {

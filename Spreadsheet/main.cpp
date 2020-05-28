@@ -25,11 +25,14 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 			}
 			else {
 				cin >> fileName;
-				openFile = true;
+				//openFile = true;
 
-				table.openFile(fileName);
-				cout << "rows: " << table.getRows() << endl;
-				cout << "cols: " << table.getColumns() << endl;
+				if (table.openFile(fileName))
+				{
+					openFile = true;
+					cout << "rows: " << table.getRows() << endl;
+					cout << "cols: " << table.getColumns() << endl;
+				}
 			}
 		}
 
@@ -90,6 +93,12 @@ int main() //  github repository: https://github.com/Icaka/Spreadsheet
 				cin >> i;
 				cin >> t;
 				cin.getline(newContent, MAXN);
+
+				if (i < 1 || t < 1 || i > table.getRows() || t > table.getColumns())
+				{
+					cout << "Out of boundaries" << endl;
+					continue;
+				}
 
 				if (!(newContent[1] == '"' && newContent[strlen(newContent) - 1] == '"'))
 				{

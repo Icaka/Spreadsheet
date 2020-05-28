@@ -157,13 +157,7 @@ void Cell::print() const
 	else {
 		if (intContent == 0)
 		{
-			if (doubleContent == 0.0)
-			{
-				std::cout << 0;
-			}
-			else {
-				printf("%0.2f", doubleContent); // printing it until the second digit after the point
-			}
+			std::cout << doubleContent;
 		}
 		else {
 			std::cout << intContent;
